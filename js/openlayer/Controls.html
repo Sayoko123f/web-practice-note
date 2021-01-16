@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>控制元件(Control)</title>
+	<meta charset="utf-8">
+	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v4.6.5/build/ol.js"></script>
+	<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v4.6.5/css/ol.css">
+	<style>
+		.map{
+			width: 80%;
+			height: 100%;
+		}
+    .ol-mouse-position{
+      right: 50px;
+    }
+    .ol-scale-line{
+      left: 40px;
+    }
+    .ol-rotate{
+      top: 2.5em;
+    }
+	</style>
+</head>
+<body>
+	<div id="map" class="map"></div>
+  <script>
+    var map = new ol.Map({
+      controls: ol.control.defaults({
+          attribution: true,            // true or false
+          rotate: true,
+          zoom: true
+      }).extend([
+          new ol.control.FullScreen(),
+          new ol.control.MousePosition({ coordinateFormat: ol.coordinate.createStringXY(4) }),
+          new ol.control.OverviewMap({ view: new ol.View({projection:'EPSG:4326'}) }),
+          new ol.control.ScaleLine(),
+          new ol.control.ZoomSlider(),
+          new ol.control.ZoomToExtent()
+      ]),
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: [121, 23.5],
+        projection:'EPSG:4326',
+        zoom: 7.5
+      })
+    });
+  </script>
+</body>
+</html>

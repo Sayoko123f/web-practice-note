@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Set Style</title>
+	<meta charset="utf-8">
+	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v4.6.5/build/ol.js"></script>
+	<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v4.6.5/css/ol.css">
+	<style>
+		.map{
+			width: 80%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div id="map" class="map"></div>
+  <script>
+    var styles = {
+      'Point': new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [16,32],             
+          anchorXUnits: 'pixels',
+          anchorYUnits: 'pixels',
+          opacity: 1,
+          crossOrigin: 'anonymous',         // 跨來源資料共用
+          src: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        })
+      }),
+      'Polygon': new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: 'blue',
+          lineCap: 'square',
+          lineDash: [4],
+          width: 3
+        }),
+        fill: new ol.style.Fill({
+          color: 'rgba(0, 0, 255, 0.1)'
+        })
+      })
+    };
+
+    var styleFunction = function(feature) {
+      return styles[feature.getGeometry().getType()];   //幾何類型
+    };
+
+    var OSMLayer = new ol.layer.Tile({
+      source: new ol.source.OSM()
+    });
+
+    var GeoJsonLayer = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        url: 'station.geojson', 
+        format: new ol.format.GeoJSON()
+      }),
+      style: styleFunction
+    });
+    
+    var map = new ol.Map({
+      target: 'map',
+      layers: [
+        OSMLayer, GeoJsonLayer
+      ],
+      view: new ol.View({
+        center: [121.35, 25.05],
+        projection:'EPSG:4326',
+        zoom: 11
+      })
+    });
+  </script>
+</body>
+</html>

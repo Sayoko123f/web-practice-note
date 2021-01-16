@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery effects</title>
+	<!-- include jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+	<script>			
+		$(function(){										// same as $(document).ready(function(){  }); 
+			$("#b1").click(function(){
+				$("#div1").hide(1000);			// milliseconds
+			});
+			$("#b2").click(function(){
+				$("#div1").show("fast");
+			});
+			$("#b3").click(function(){
+				$("#div2").toggle("slow");
+			});
+			$("#div3").css({"color":"white","background-color":"rgba(0,0,0,0.8)"});
+			$("#para1").click(function(){
+				$("#div3").slideToggle();
+			});
+			$("#b4").click(function(){
+				$("#para2").animate({left:'250px',height:'300px',width:'300px'},2000);	// params: defines the CSS properties
+			});
+			$("#b5").click(function(){
+				$("#para2").stop();					// stop animations or effects before it is finished
+			});
+		});	
+	</script>
+	<button id="b1">Hide</button>
+	<button id="b2">Show</button>
+	<button id="b3">Toggle</button>
+	<div id="div1">para1</div>
+	<div id="div2">toggle effect ~show time~</div>
+	<p id="para1">click me to show sliding effect</p>
+	<div id="div3">sliding effect</div>
+	<hr>
+	<button id="b4">press me</button>
+	<div id="para2" style="background:#ffbf21;height:50px;width:50px;margin-top:20px;position:absolute;">para2</div>
+	<button id="b5">press me for testing stop</button>
+</body>
+</html>

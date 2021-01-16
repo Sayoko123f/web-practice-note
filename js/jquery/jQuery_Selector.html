@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery Example</title>
+	<!-- include jQuery -->
+	<!--<script src="jquery-3.4.1.min.js"></script> -->																			<!-- way1 -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script><!-- way2 -->
+</head>
+<body>	
+	<script>			
+		$(function(){																		// same as $(document).ready(function(){  }); 
+			$("#para1").css("color","red");								// .css("property","value")
+			$("#para1").css("background-color","black");
+			$("button").click(function(){
+				$("#para2").html(total);										// .html("value")
+			});
+		});
+		var total = 0;
+		total = sumFunction(100,200);
+		function sumFunction(a, b){
+			return a + b;
+		}				
+	</script>
+	<div id="para1">para1</div>
+	<div id="para2">para2</div>
+	<button>What is the grade?</button>
+</body>
+</html>

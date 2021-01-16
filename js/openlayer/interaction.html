@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>互動(Interaction)</title>
+	<meta charset="utf-8">
+	<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v4.6.5/build/ol.js"></script>
+	<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v4.6.5/css/ol.css">
+	<style>
+		.map{
+			width: 80%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+  <!-- 設置tabindex，才能使div獲得鍵盤事件 -->
+	<div id="map" tabindex="0" class="map"></div>
+  <script>
+    var map = new ol.Map({
+      interactions: ol.interaction.defaults({
+        doubleClickZoom: false,
+        mouseWheelZoom: false,
+        shiftDragZoom: false,
+        pinchZoom:false,
+        altShiftDragRotate: false
+      }),
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: [121, 23.5],
+        projection:'EPSG:4326',
+        zoom: 7.5
+      })
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8">
+    <title>Todolist</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <h1>Todolist:Vue.js</h1>
+    <div id="list">
+        <input v-model="newWork" @keyup.enter="add" type="text" placeholder="Add a new work......">
+        <hr />
+        <ul>
+            <li v-for="(work,i) in viewMode()">
+                <input type="checkbox" v-model="work.checked">
+                <input v-model="work.main" v-show="work.show" type="text">
+                <span v-show="!work.show"
+                    :style="work.checked?{textDecoration:'line-through'}:{textDecoration:'none'}">{{work.main}} </span>
+                <button @click="edit(i)">Edit</button>
+                <button @click="del(i)">Delete</button>
+            </li>
+        </ul>
+        <hr/>
+        <p>ViewMode
+            <select v-model="mode">
+                <option value="a">All</option>
+                <option value="b">Finished</option>
+                <option value="c">Ondone</option>
+            </select>
+        </p>
+        
+    </div>
+    <script src="Todolist.js"></script>
+</body>
+
+</html>

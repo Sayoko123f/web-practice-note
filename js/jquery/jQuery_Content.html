@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jQuery content</title>
+	<!-- include jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<style>
+		.style1 {
+			font-weight: bold;
+			font-size: 20;
+			color: red;
+		}
+		.style2 {
+			color: green;
+		}
+	</style>
+</head>
+<body>
+	<script>
+		var i = 3, j = 1;			
+		$(function(){
+			/* Get Content and Attributes */
+			$("#b1").click(function(){
+				console.log("clog1:",$("#para1").text(),"clog2:",$("#para1").html()); 														// text() vs. html()
+				console.log("clog1:",$("#text1").text(),"clog2:",$("#text1").html(),"clog3:",$("#text1").val());	// val()
+				console.log("clog1:",$("#ul1").attr("style"));																										// attr()
+			});
+			/* Set Content and Attributes */
+			$("#b2").click(function(){
+				$("#para1").text($("#para1").text()+": "+Date());
+				$("#text1").val("changeValue");
+				$("#ul1").attr("style","list-style-type:circle");
+			});
+			/* Add Elements */
+			$("#b3").click(function(){
+				$("#para2").append("para"+i);
+				i++;
+			});
+			$("#b4").click(function(){
+				$("#ul1").append("<li> Drinks of para"+ j + "</li>");
+				j++;
+			});
+			/* Set CSS Classes */
+			$("#b5").click(function(){
+				$("#para1, #para2").addClass("style1");
+				$("input, ul").toggleClass("style2");
+			});
+			/* Remove Elements */
+			$("#b6").click(function(){
+				$("div").remove("#para1");  								// Removes the selected element (and its child elements)
+				$("#ul1").empty();													// Removes the child elements from the selected element
+			});
+		});	
+	</script>
+	<button id="b1">Get contents</button>
+	<button id="b2">Set contents</button>
+	<button id="b3">Add contents</button>
+	<button id="b4">Add elements</button>
+	<button id="b5">CSS Classes</button>
+	<button id="b6">Remove/Empty</button>
+	<div id="para1"><ins>para1</ins></div>
+	<div id="para2">para2</div><br>
+	input: <input type="text" id="text1" name="text1" value="defaultValue">
+	<ul style="list-style-type: square;" id="ul1">
+		<li>Coffee</li>
+		<li>Tea</li>
+		<li>Milk</li>
+	</ul>
+</body>
+</html>

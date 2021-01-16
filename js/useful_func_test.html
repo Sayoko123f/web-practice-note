@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>useful_func_test</title>
+    <script src="useful_func.js"></script>
+</head>
+
+<body>
+    <ul>
+        <li><button onclick="exportTxt('filename.txt','Content.')">exportTxt</button></li>
+        <li><button onclick="exportCsv('mycsv.csv',[['123', '456', '789'], ['abc', 'def', 'cba']],['h1','h2','h3'])">exportCsv</button></li>
+        <li><button onclick="fetch_getMethod('https://httpbin.org/get')">fetch_getMethod</button></li>
+        <li><button onclick="fetch_postMethod('https://httpbin.org/post','123')">fetch_postMethod</button></li>
+    </ul>
+    <hr />
+    <div>Upload txt.
+    </div>
+    <input type="file" accept=".txt,.xml" onchange="handleFile(this.files)">
+    <hr />
+    <div id="imgPreview">Upload image.
+    </div>
+    <input type="file" accept=".jpg,.png" onchange="handleImgFiles(this.files)">
+    <div id="dropbox" style="background-color: cornflowerblue;width: 200px;height: 120px;">Drop image file Here.</div>
+    <hr />
+    <hr />
+    <button onclick="replaceSelectedText('Hello world.')">replaceSelectedText</button>
+    <textarea id="myTextArea" rows="10">Text, Text.</textarea>
+    <script>
+        window.onload = function () {
+            // for dropbox
+            var dropbox = document.getElementById("dropbox");
+            dropbox.addEventListener("dragenter", function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }, false);
+            dropbox.addEventListener("dragover", function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }, false);
+            dropbox.addEventListener("drop", drop, false);
+            // end for dropbox
+        }
+    </script>
+</body>
+
+</html>
