@@ -9,7 +9,7 @@
 ## 重點
 依布林值切換 class
 ```
-:style="work.checked?{textDecoration:'line-through'}:{textDecoration:'none'}
+:style="work.checked?{textDecoration:'line-through'}:{textDecoration:'none'}"
 ```
 監聽鍵盤事件
 ```
@@ -18,4 +18,14 @@
 刪除陣列元素使用 Vue.delete
 ```
 Vue.delete(this.works, i);
+```
+過濾器
+```
+viewMode() {
+            switch (this.mode) {
+                case 'a': return this.works;
+                case 'b': return this.works.filter(work => work.checked == true);
+                case 'c': return this.works.filter(work => work.checked == false);
+            }
+        }
 ```
