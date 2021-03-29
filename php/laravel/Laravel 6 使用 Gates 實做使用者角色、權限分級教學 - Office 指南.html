@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head >
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- This site is optimized with the Yoast SEO plugin v14.8.1 - https://yoast.com/wordpress/plugins/seo/ -->
+	<title>Laravel 6 使用 Gates 實做使用者角色、權限分級教學 - Office 指南</title>
+	<meta name="robots" content="index, follow" />
+	<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+	<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+	<link rel="canonical" href="https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/" />
+	<meta property="og:locale" content="zh_TW" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="Laravel 6 使用 Gates 實做使用者角色、權限分級教學 - Office 指南" />
+	<meta property="og:description" content="介紹如何在 Laravel 網頁專案中使用 Gates 功能，實做使用者角色與權限分級，區分一般使用者與管理者 [&hellip;]" />
+	<meta property="og:url" content="https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/" />
+	<meta property="og:site_name" content="Office 指南" />
+	<meta property="article:published_time" content="2019-11-28T11:14:10+00:00" />
+	<meta property="article:modified_time" content="2019-11-28T11:32:49+00:00" />
+	<meta property="og:image" content="https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01.jpg" />
+	<meta property="og:image:width" content="1920" />
+	<meta property="og:image:height" content="960" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://officeguide.cc/#website","url":"https://officeguide.cc/","name":"Office \u6307\u5357","description":"\u8fa6\u516c\u5ba4\u5de5\u4f5c\u5be6\u7528\u6559\u5b78","potentialAction":[{"@type":"SearchAction","target":"https://officeguide.cc/?s={search_term_string}","query-input":"required name=search_term_string"}],"inLanguage":"zh-TW"},{"@type":"ImageObject","@id":"https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/#primaryimage","inLanguage":"zh-TW","url":"https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01.jpg","width":"1920","height":"960"},{"@type":"WebPage","@id":"https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/#webpage","url":"https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/","name":"Laravel 6 \u4f7f\u7528 Gates \u5be6\u505a\u4f7f\u7528\u8005\u89d2\u8272\u3001\u6b0a\u9650\u5206\u7d1a\u6559\u5b78 - Office \u6307\u5357","isPartOf":{"@id":"https://officeguide.cc/#website"},"primaryImageOfPage":{"@id":"https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/#primaryimage"},"datePublished":"2019-11-28T11:14:10+00:00","dateModified":"2019-11-28T11:32:49+00:00","author":{"@id":"https://officeguide.cc/#/schema/person/d471aab7ab5cb222e4aa3782f5a40d3d"},"inLanguage":"zh-TW","potentialAction":[{"@type":"ReadAction","target":["https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/"]}]},{"@type":"Person","@id":"https://officeguide.cc/#/schema/person/d471aab7ab5cb222e4aa3782f5a40d3d","name":"Office Guide","image":{"@type":"ImageObject","@id":"https://officeguide.cc/#personlogo","inLanguage":"zh-TW","url":"https://secure.gravatar.com/avatar/1c3040c2cfd89f0204f9470ceef1e08f?s=96&d=mm&r=g","caption":"Office Guide"},"description":"\u8fa6\u516c\u5ba4\u5de5\u4f5c\u5be6\u7528\u6559\u5b78"}]}</script>
+	<!-- / Yoast SEO plugin. -->
+
+
+<link rel="amphtml" href="https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/amp/" /><meta name="generator" content="AMP for WP 1.0.62.2"/><link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="訂閱《Office 指南》&raquo; 資訊提供" href="https://officeguide.cc/feed/" />
+<link rel="alternate" type="application/rss+xml" title="訂閱《Office 指南》&raquo; 留言的資訊提供" href="https://officeguide.cc/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="訂閱《Office 指南 》&raquo;〈Laravel 6 使用 Gates 實做使用者角色、權限分級教學〉留言的資訊提供" href="https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/officeguide.cc\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.5"}};
+			!function(e,a,t){var r,n,o,i,p=a.createElement("canvas"),s=p.getContext&&p.getContext("2d");function c(e,t){var a=String.fromCharCode;s.clearRect(0,0,p.width,p.height),s.fillText(a.apply(this,e),0,0);var r=p.toDataURL();return s.clearRect(0,0,p.width,p.height),s.fillText(a.apply(this,t),0,0),r===p.toDataURL()}function l(e){if(!s||!s.fillText)return!1;switch(s.textBaseline="top",s.font="600 32px Arial",e){case"flag":return!c([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])&&(!c([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!c([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]));case"emoji":return!c([55357,56424,8205,55356,57212],[55357,56424,8203,55356,57212])}return!1}function d(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(i=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},o=0;o<i.length;o++)t.supports[i[o]]=l(i[o]),t.supports.everything=t.supports.everything&&t.supports[i[o]],"flag"!==i[o]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[i[o]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(r=t.source||{}).concatemoji?d(r.concatemoji):r.wpemoji&&r.twemoji&&(d(r.twemoji),d(r.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='office-guide-css'  href='https://officeguide.cc/wp-content/themes/officeguide/style.css?ver=1.0.0' type='text/css' media='all' />
+<style id='office-guide-inline-css' type='text/css'>
+
+		.wp-custom-logo .site-container .title-area {
+			max-width: 230px;
+		}
+		
+		.wp-custom-logo .title-area {
+			padding-top: 12.71875px;
+		}
+		
+</style>
+<link rel='stylesheet' id='wp-block-library-css'  href='https://officeguide.cc/wp-includes/css/dist/block-library/style.min.css?ver=5.5' type='text/css' media='all' />
+<link rel='stylesheet' id='genesis-sample-fonts-css'  href='//fonts.googleapis.com/css?family=Source+Sans+Pro%3A400%2C400i%2C600%2C700&#038;ver=1.0.0' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css'  href='https://officeguide.cc/wp-includes/css/dashicons.min.css?ver=5.5' type='text/css' media='all' />
+<link rel='stylesheet' id='simple-social-icons-font-css'  href='https://officeguide.cc/wp-content/plugins/simple-social-icons/css/style.css?ver=3.0.2' type='text/css' media='all' />
+<script type='text/javascript' src='https://officeguide.cc/wp-includes/js/jquery/jquery.js?ver=1.12.4-wp' id='jquery-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-content/plugins/simple-social-icons/svgxuse.js?ver=1.1.21' id='svg-x-use-js'></script>
+<link rel="https://api.w.org/" href="https://officeguide.cc/wp-json/" /><link rel="alternate" type="application/json" href="https://officeguide.cc/wp-json/wp/v2/posts/7801" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://officeguide.cc/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://officeguide.cc/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 5.5" />
+<link rel='shortlink' href='https://officeguide.cc/?p=7801' />
+<link rel="alternate" type="application/json+oembed" href="https://officeguide.cc/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fofficeguide.cc%2Flarave-6-implement-user-roles-and-permissions-using-gates%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://officeguide.cc/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fofficeguide.cc%2Flarave-6-implement-user-roles-and-permissions-using-gates%2F&#038;format=xml" />
+<style type="text/css">.eafl-disclaimer-small { font-size: 0.8em; }
+.eafl-disclaimer-smaller { font-size: 0.6em; }</style><link rel="pingback" href="https://officeguide.cc/xmlrpc.php" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#e23f00">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#e23f00">
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116677590-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-116677590-1');
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-5624032307910838",
+enable_page_level_ads: true,
+tag_partner: "genesis"
+});
+</script><link rel="icon" href="https://officeguide.cc/wp-content/uploads/2018/03/cropped-officeguide-logo-1920-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://officeguide.cc/wp-content/uploads/2018/03/cropped-officeguide-logo-1920-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://officeguide.cc/wp-content/uploads/2018/03/cropped-officeguide-logo-1920-180x180.png" />
+<meta name="msapplication-TileImage" content="https://officeguide.cc/wp-content/uploads/2018/03/cropped-officeguide-logo-1920-270x270.png" />
+		<style type="text/css" id="wp-custom-css">
+			
+		</style>
+		</head>
+<body class="post-template-default single single-post postid-7801 single-format-standard wp-custom-logo header-full-width content-sidebar genesis-breadcrumbs-hidden genesis-footer-widgets-hidden"><div class="site-container"><ul class="genesis-skip-link"><li><a href="#genesis-nav-primary" class="screen-reader-shortcut"> Skip to primary navigation</a></li><li><a href="#genesis-content" class="screen-reader-shortcut"> Skip to main content</a></li><li><a href="#genesis-sidebar-primary" class="screen-reader-shortcut"> Skip to primary sidebar</a></li></ul><header class="site-header"><div class="wrap"><div class="title-area"><a href="https://officeguide.cc/" class="custom-logo-link" rel="home"><img width="480" height="93" src="https://officeguide.cc/wp-content/uploads/2018/03/officeguide-text-logo-480.png" class="custom-logo" alt="Office 指南" loading="lazy" srcset="https://officeguide.cc/wp-content/uploads/2018/03/officeguide-text-logo-480.png 480w, https://officeguide.cc/wp-content/uploads/2018/03/officeguide-text-logo-480-300x58.png 300w" sizes="(max-width: 480px) 100vw, 480px" /></a><p class="site-title"><a href="https://officeguide.cc/">Office 指南</a></p><p class="site-description">辦公室工作實用教學</p></div><nav class="nav-primary" aria-label="Main" id="genesis-nav-primary"><div class="wrap"><ul id="menu-%e4%b8%bb%e9%81%b8%e5%96%ae" class="menu genesis-nav-menu menu-primary js-superfish"><li id="menu-item-30" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-30"><a href="https://officeguide.cc/category/excel/"><span >Excel</span></a></li>
+<li id="menu-item-32" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-32"><a href="https://officeguide.cc/category/word/"><span >Word</span></a></li>
+<li id="menu-item-31" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-31"><a href="https://officeguide.cc/category/powerpoint/"><span >PowerPoint</span></a></li>
+<li id="menu-item-35" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-35"><a href="https://officeguide.cc/category/windows/"><span >Windows</span></a></li>
+<li id="menu-item-34" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-34"><a href="https://officeguide.cc/category/powershell/"><span >PowerShell</span></a></li>
+<li id="menu-item-2957" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2957"><a href="https://officeguide.cc/category/r/"><span >R</span></a></li>
+</ul></div></nav></div></header><div class="site-inner"><div class="content-sidebar-wrap"><main class="content" id="genesis-content"><article class="post-7801 post type-post status-publish format-standard has-post-thumbnail category-php tag-laravel entry" aria-label="Laravel 6 使用 Gates 實做使用者角色、權限分級教學"><header class="entry-header"><h1 class="entry-title">Laravel 6 使用 Gates 實做使用者角色、權限分級教學</h1>
+<div class="singular-featured-image"><img width="702" height="351" src="https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01-768x384.jpg" class="attachment-medium_large size-medium_large" alt="" loading="lazy" srcset="https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01-768x384.jpg 768w, https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01-300x150.jpg 300w, https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01-1024x512.jpg 1024w, https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01-1536x768.jpg 1536w, https://officeguide.cc/wp-content/uploads/2019/11/php-goal-flat-logo-20191125-01.jpg 1920w" sizes="(max-width: 702px) 100vw, 702px" /></div></header><div class="entry-content"><p>介紹如何在 Laravel 網頁專案中使用 Gates 功能，實做使用者角色與權限分級，區分一般使用者與管理者。<br />
+<p>
+<!-- OfficeGuide 文章中間連結 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:200px;height:90px"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="3805723117"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></p></p>
+<h2>建立基本 Laravel 專案</h2>
+<p>首先參考 <a href="https://officeguide.cc/laravel-6-create-project-with-user-authentication/">Laravel 6 建立含有使用者註冊、登入認證功能的網頁專案教學</a>，建立好基本的 Laravel 專案，但不要執行 <code>migrate</code>。</p>
+<h2>使用者角色</h2>
+<p>假設我們希望將使用者區分為一般使用者（<code>user</code>）、一般管理者（<code>manager</code>）與系統管理者（<code>admin</code>）三類，分別授予不同的權限。</p>
+<p>編輯 <code>app/User.php</code>，加入三種帳號角色名稱的常數字串，並將 <code>role</code> 這個欄位加入 <code>fillable</code> 中：</p>
+<pre class="code"><span class="Statement">class</span> User <span class="Statement">extends</span> Authenticatable
+<span class="Special">{</span>
+    <span class="Comment">// ...</span>
+
+    <span class="Type">const</span> ROLE_ADMIN <span class="Statement">=</span> <span class="Constant">'</span><span class="Constant">admin</span><span class="Constant">'</span>;
+    <span class="Type">const</span> ROLE_MANAGER <span class="Statement">=</span> <span class="Constant">'</span><span class="Constant">manager</span><span class="Constant">'</span>;
+    <span class="Type">const</span> ROLE_USER <span class="Statement">=</span> <span class="Constant">'</span><span class="Constant">user</span><span class="Constant">'</span>;
+
+    <span class="Type">protected</span> <span class="Statement">$</span><span class="Identifier">fillable</span> <span class="Statement">=</span> <span class="Special">[</span>
+        <span class="Constant">'</span><span class="Constant">name</span><span class="Constant">'</span>, <span class="Constant">'</span><span class="Constant">email</span><span class="Constant">'</span>, <span class="Constant">'</span><span class="Constant">password</span><span class="Constant">'</span>, <span class="Constant">'</span><span class="Constant">role</span><span class="Constant">'</span>,
+    <span class="Special">]</span>;
+
+    <span class="Comment">// ...</span>
+<span class="Special">}</span></pre>
+<div style="margin: 25px 0 25px 0;">
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="4042983375"
+	 data-full-width-responsive="false"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div><h2>資料庫 Migration</h2>
+<p>編輯 <code>database/migrations/2014_10_12_000000_create_users_table.php</code> 這一個建立使用者資料表的 migration 設定檔，在其中加入一欄用於儲存帳號角色的 <code>role</code> 欄位：</p>
+<pre class="code"><span class="PreProc">use</span> App\User;
+
+<span class="Statement">class</span> CreateUsersTable <span class="Statement">extends</span> Migration
+<span class="Special">{</span>
+    <span class="Comment">// ...</span>
+
+    <span class="Type">public</span> <span class="Statement">function</span> up<span class="Special">()</span>
+    <span class="Special">{</span>
+        <span class="Type">Schema</span><span class="Statement">::</span>create<span class="Special">(</span><span class="Constant">'</span><span class="Constant">users</span><span class="Constant">'</span>, <span class="Statement">function</span> <span class="Special">(</span>Blueprint <span class="Statement">$</span><span class="Identifier">table</span><span class="Special">)</span> <span class="Special">{</span>
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>bigIncrements<span class="Special">(</span><span class="Constant">'</span><span class="Constant">id</span><span class="Constant">'</span><span class="Special">)</span>;
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>string<span class="Special">(</span><span class="Constant">'</span><span class="Constant">name</span><span class="Constant">'</span><span class="Special">)</span>;
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>string<span class="Special">(</span><span class="Constant">'</span><span class="Constant">role</span><span class="Constant">'</span><span class="Special">)</span><span class="Statement">-&gt;</span>default<span class="Special">(</span><span class="Type">User</span><span class="Statement">::</span>ROLE_USER<span class="Special">)</span>; <span class="Comment">// 加入角色欄位</span>
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>string<span class="Special">(</span><span class="Constant">'</span><span class="Constant">email</span><span class="Constant">'</span><span class="Special">)</span><span class="Statement">-&gt;</span>unique<span class="Special">()</span>;
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>timestamp<span class="Special">(</span><span class="Constant">'</span><span class="Constant">email_verified_at</span><span class="Constant">'</span><span class="Special">)</span><span class="Statement">-&gt;</span>nullable<span class="Special">()</span>;
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>string<span class="Special">(</span><span class="Constant">'</span><span class="Constant">password</span><span class="Constant">'</span><span class="Special">)</span>;
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>rememberToken<span class="Special">()</span>;
+            <span class="Statement">$</span><span class="Identifier">table</span><span class="Statement">-&gt;</span>timestamps<span class="Special">()</span>;
+        <span class="Special">})</span>;
+    <span class="Special">}</span>
+<span class="Special">}</span></pre>
+<p>修改好之後，回到 Laravel 專案目錄，執行 <code>migrate</code>：</p>
+<pre class="code"><span class="Comment"># 建立資料庫結構</span>
+php artisan migrate</pre>
+<div style="margin: 25px 0 25px 0;">
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="4042983375"
+	 data-full-width-responsive="false"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div><h2>使用者註冊 Controller</h2>
+<p>編輯 <code>app/Http/Controllers/Auth/RegisterController.php</code>，設定使用者註冊時的角色都是一般使用者：</p>
+<pre class="code"><span class="Type">protected</span> <span class="Statement">function</span> create<span class="Special">(</span><span class="Type">array</span> <span class="Statement">$</span><span class="Identifier">data</span><span class="Special">)</span>
+<span class="Special">{</span>
+    <span class="Statement">return</span> <span class="Type">User</span><span class="Statement">::</span>create<span class="Special">([</span>
+        <span class="Constant">'</span><span class="Constant">name</span><span class="Constant">'</span> <span class="Statement">=&gt;</span> <span class="Statement">$</span><span class="Identifier">data</span><span class="Special">[</span><span class="Constant">'</span><span class="Constant">name</span><span class="Constant">'</span><span class="Special">]</span>,
+        <span class="Constant">'</span><span class="Constant">email</span><span class="Constant">'</span> <span class="Statement">=&gt;</span> <span class="Statement">$</span><span class="Identifier">data</span><span class="Special">[</span><span class="Constant">'</span><span class="Constant">email</span><span class="Constant">'</span><span class="Special">]</span>,
+        <span class="Constant">'</span><span class="Constant">password</span><span class="Constant">'</span> <span class="Statement">=&gt;</span> <span class="Identifier">Hash</span><span class="Statement">::</span>make<span class="Special">(</span><span class="Statement">$</span><span class="Identifier">data</span><span class="Special">[</span><span class="Constant">'</span><span class="Constant">password</span><span class="Constant">'</span><span class="Special">])</span>,
+        <span class="Constant">'</span><span class="Constant">role</span><span class="Constant">'</span> <span class="Statement">=&gt;</span> <span class="Type">User</span><span class="Statement">::</span>ROLE_USER,  <span class="Comment">// 預設為一般使用者</span>
+    <span class="Special">])</span>;
+<span class="Special">}</span></pre>
+<div style="margin: 25px 0 25px 0;">
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="4042983375"
+	 data-full-width-responsive="false"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div><h2>建立 Gate 權限規則</h2>
+<p>建立自訂的 Gate 權限規則，以判斷每位使用者是否有權限執行特定的動作。</p>
+<p>編輯 <code>app/Providers/AuthServiceProvider.php</code>，加入自訂的 Gates 規則：</p>
+<pre class="code"><span class="PreProc">use</span> App\User;
+
+<span class="Statement">class</span> AuthServiceProvider <span class="Statement">extends</span> ServiceProvider
+<span class="Special">{</span>
+    <span class="Comment">// ..</span>
+
+    <span class="Type">public</span> <span class="Statement">function</span> boot<span class="Special">()</span>
+    <span class="Special">{</span>
+        <span class="Statement">$</span><span class="Identifier">this</span><span class="Statement">-&gt;</span>registerPolicies<span class="Special">()</span>;
+
+        <span class="Comment">// 系統管理者 Gate 規則</span>
+        <span class="Type">Gate</span><span class="Statement">::</span>define<span class="Special">(</span><span class="Constant">'</span><span class="Constant">admin</span><span class="Constant">'</span>, <span class="Statement">function</span> <span class="Special">(</span><span class="Statement">$</span><span class="Identifier">user</span><span class="Special">)</span> <span class="Special">{</span>
+            <span class="Statement">return</span> <span class="Statement">$</span><span class="Identifier">user</span><span class="Statement">-&gt;</span>role <span class="Statement">===</span> <span class="Type">User</span><span class="Statement">::</span>ROLE_ADMIN;
+        <span class="Special">})</span>;
+
+        <span class="Comment">// 一般管理者 Gate 規則</span>
+        <span class="Type">Gate</span><span class="Statement">::</span>define<span class="Special">(</span><span class="Constant">'</span><span class="Constant">manager</span><span class="Constant">'</span>, <span class="Statement">function</span> <span class="Special">(</span><span class="Statement">$</span><span class="Identifier">user</span><span class="Special">)</span> <span class="Special">{</span>
+            <span class="Statement">return</span> <span class="Statement">$</span><span class="Identifier">user</span><span class="Statement">-&gt;</span>role <span class="Statement">===</span> <span class="Type">User</span><span class="Statement">::</span>ROLE_MANAGER;
+        <span class="Special">})</span>;
+
+        <span class="Comment">// 一般使用者 Gate 規則</span>
+        <span class="Type">Gate</span><span class="Statement">::</span>define<span class="Special">(</span><span class="Constant">'</span><span class="Constant">user</span><span class="Constant">'</span>, <span class="Statement">function</span> <span class="Special">(</span><span class="Statement">$</span><span class="Identifier">user</span><span class="Special">)</span> <span class="Special">{</span>
+            <span class="Statement">return</span> <span class="Statement">$</span><span class="Identifier">user</span><span class="Statement">-&gt;</span>role <span class="Statement">===</span> <span class="Type">User</span><span class="Statement">::</span>ROLE_USER;
+        <span class="Special">})</span>;
+    <span class="Special">}</span>
+<span class="Special">}</span></pre>
+<p>這樣三種角色的基本權限就設定完成了，接下來就可以在 Laravel 專案的各種地方運用這些權限設定。</p>
+<div style="margin: 25px 0 25px 0;">
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="4042983375"
+	 data-full-width-responsive="false"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div><h2>Blade 運用 Gate 權限設定</h2>
+<p>在 Blade 樣板中可以運用 <code>@can</code>、<code>@cannot</code> 或 <code>@canany</code> 來判斷使用者的權限（詳細用法可參考 <a href="https://laravel.com/docs/6.x/authorization#via-blade-templates">Laravel 的文件</a>）：</p>
+<pre class="code"><span class="Statement">@can</span><span class="PreProc">(</span><span class="Constant">'</span><span class="Constant">admin</span><span class="Constant">'</span><span class="PreProc">)</span>
+    <span class="Comment">&lt;!</span><span class="Comment">-- 系統管理者 --</span><span class="Comment">&gt;</span>
+<span class="Statement">@elsecan</span><span class="PreProc">(</span><span class="Constant">'</span><span class="Constant">manager</span><span class="Constant">'</span><span class="PreProc">)</span>
+    <span class="Comment">&lt;!</span><span class="Comment">-- 一般管理者 --</span><span class="Comment">&gt;</span>
+<span class="Statement">@else</span>
+    <span class="Comment">&lt;!</span><span class="Comment">-- 一般使用者 --</span><span class="Comment">&gt;</span>
+<span class="Statement">@endcan</span></pre>
+<h2>Controller 運用 Gate 權限設定</h2>
+<p>若在 Controller 中則可使用 <code>Gate::allows</code> 或 <code>Gate::denies</code> 判斷使用者權限：</p>
+<pre class="code"><span class="PreProc">use</span> Illuminate\Support\Facades\Gate;
+
+<span class="Type">class</span> Controller <span class="Type">extends</span> BaseController
+<span class="Special">{</span>
+    <span class="Comment">// ...</span>
+
+    <span class="Type">public</span> <span class="PreProc">function</span> someAction<span class="Special">()</span>
+    <span class="Special">{</span>
+        <span class="Statement">if</span> <span class="Special">(</span>Gate<span class="Statement">::</span>allows<span class="Special">(</span><span class="Constant">'admin'</span><span class="Special">))</span> <span class="Special">{</span>
+            <span class="Statement">return</span> <span class="Constant">'系統管理者。'</span>;
+        <span class="Special">}</span>
+
+        <span class="Statement">if</span> <span class="Special">(</span>Gate<span class="Statement">::</span>denies<span class="Special">(</span><span class="Constant">'admin'</span><span class="Special">))</span> <span class="Special">{</span>
+            <span class="Statement">return</span> <span class="Constant">'非系統管理者！'</span>;
+        <span class="Special">}</span>
+    <span class="Special">}</span>
+<span class="Special">}</span></pre>
+<p>另外一種方式是運用 <code>authorize</code> 直接限制整個函數的執行權限：</p>
+<pre class="code"><span class="Type">class</span> Controller <span class="Type">extends</span> BaseController
+<span class="Special">{</span>
+    <span class="Comment">// ...</span>
+
+    <span class="Comment">// 只有系統管理者可以執行</span>
+    <span class="Type">public</span> <span class="PreProc">function</span> adminAction<span class="Special">()</span>
+    <span class="Special">{</span>
+        <span class="Statement">$</span><span class="Identifier">this</span><span class="Type">-&gt;</span>authorize<span class="Special">(</span><span class="Constant">'admin'</span><span class="Special">)</span>;
+
+        <span class="Comment">// ...</span>
+    <span class="Special">}</span>
+<span class="Special">}</span></pre>
+<div style="margin: 25px 0 25px 0;">
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="4042983375"
+	 data-full-width-responsive="false"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script></div><h2>Middleware 運用 Gate 權限設定</h2>
+<p>在 Middleware 中也可以使用 Gate 的權限設定，例如應用在 Route 之中：</p>
+<pre class="code"><span class="Comment">// 只有系統管理者可以執行</span>
+<span class="Type">Route</span><span class="Statement">::</span>get<span class="Special">(</span><span class="Constant">'</span><span class="Constant">/someAction</span><span class="Constant">'</span>, <span class="Constant">'</span><span class="Constant">MyController@someAction</span><span class="Constant">'</span><span class="Special">)</span> <span class="Statement">-&gt;</span> middleware<span class="Special">(</span><span class="Constant">'</span><span class="Constant">can:admin</span><span class="Constant">'</span><span class="Special">)</span>;</pre>
+<h2>設定帳號權限</h2>
+<p>在這裡的實作中，帳號的權限是根據 <code>role</code> 欄位值所決定的，要更改帳號權限的話，可以直接從資庫中更改，或是透過 Laravel 的 Tinker 環境快速設定：</p>
+<pre class="code"><span class="Comment"># 進入 Tinker 互動式指令環境</span>
+php artisan tinker</pre>
+<p>然後在 Tinker 環境中，以一般的 PHP 語法直接更改使用者的 <code>role</code> 屬性：</p>
+<pre class="code"><span class="Comment"># 將 demo@gmail.com 帳號設為系統管理者</span>
+<span class="PreProc">use</span> App\User;
+User<span class="Statement">::</span>where<span class="Special">(</span><span class="Constant">'email'</span>, <span class="Constant">'demo@gmail.com'</span><span class="Special">)</span> <span class="Statement">-</span><span class="Statement">&gt;</span> update<span class="Special">([</span><span class="Constant">'role'</span> <span class="Statement">=</span><span class="Statement">&gt;</span> User<span class="Statement">::</span>ROLE_ADMIN<span class="Special">])</span>;</pre>
+<p>若需要讓系統管理者有網頁介面可以設定帳號權限，可參考上面這個 PHP 語法，自己設計修改帳號的使用者介面。</p>
+<!--<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:dc="http://purl.org/dc/elements/1.1/"
+			xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+		<rdf:Description rdf:about="https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/"
+    dc:identifier="https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/"
+    dc:title="Laravel 6 使用 Gates 實做使用者角色、權限分級教學"
+    trackback:ping="https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/trackback/" />
+</rdf:RDF>-->
+</div><footer class="entry-footer"><p class="entry-meta"><span class="entry-categories">分類：<a href="https://officeguide.cc/category/php/" rel="category tag">PHP</a></span> <span class="entry-tags">標籤：<a href="https://officeguide.cc/tag/laravel/" rel="tag">Laravel</a></span></p></footer></article><div class="after-entry widget-area"><section id="custom_html-2" class="widget_text widget widget_custom_html"><div class="widget_text widget-wrap"><div class="textwidget custom-html-widget"><div style="margin-bottom: 40px;">
+<!-- OfficeGuide 文章底部連結回應式 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="3726257093"
+     data-ad-format="link"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="autorelaxed"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="6011493018"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div></div></div></section>
+</div><h2 class="screen-reader-text">讀者互動</h2>	<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">發佈留言 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/larave-6-implement-user-roles-and-permissions-using-gates/#respond" style="display:none;">取消回覆</a></small></h3><form action="https://officeguide.cc/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">發佈留言必須填寫的電子郵件地址不會公開。</span> 必填欄位標示為 <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">留言</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea></p><p class="comment-form-author"><label for="author">顯示名稱 <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required='required' /></p>
+<p class="comment-form-email"><label for="email">電子郵件地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" required='required' /></p>
+<p class="comment-form-url"><label for="url">個人網站網址</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<span class="cerber-form-marker"></span><div class="g-recaptcha" data-sitekey="6Lcs7HYUAAAAACqVnbEctIl3y6x66j6ulvPNqZW_" data-callback="form_button_enabler" id="cerber-recaptcha"></div><p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="發佈留言" /> <input type='hidden' name='comment_post_ID' value='7801' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p></form>	</div><!-- #respond -->
+	</main><aside class="sidebar sidebar-primary widget-area" role="complementary" aria-label="Primary Sidebar" id="genesis-sidebar-primary"><h2 class="genesis-sidebar-title screen-reader-text">Primary Sidebar</h2><section id="custom_html-3" class="widget_text widget widget_custom_html"><div class="widget_text widget-wrap"><div class="textwidget custom-html-widget"><!-- OfficeGuide 側邊回應式（一） -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="1905801160"
+     data-ad-format="rectangle"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></div></section>
+<section id="custom_html-8" class="widget_text widget widget_custom_html"><div class="widget_text widget-wrap"><h3 class="widgettitle widget-title">搜尋</h3>
+<div class="textwidget custom-html-widget"><script>
+  (function() {
+    var cx = '017825434518428976952:ios02rhz6w8';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:searchbox-only></gcse:searchbox-only></div></div></section>
+
+		<section id="recent-posts-2" class="widget widget_recent_entries"><div class="widget-wrap">
+		<h3 class="widgettitle widget-title">近期文章</h3>
+
+		<ul>
+											<li>
+					<a href="https://officeguide.cc/excel-roundup-function-tutorial-examples/">Excel 無條件進位 ROUNDUP 函數教學與範例</a>
+									</li>
+											<li>
+					<a href="https://officeguide.cc/adsense-wire-transfer-esunbank-tutorial/">AdSense 電匯收款教學：玉山銀行外幣匯入匯款</a>
+									</li>
+											<li>
+					<a href="https://officeguide.cc/raspberry-pi-scratch-gpio-led-tutorial-examples/">樹莓派 Raspberry Pi 使用 Scratch 控制 GPIO 連接的 LED 燈教學與範例</a>
+									</li>
+											<li>
+					<a href="https://officeguide.cc/s3-awscli-s3api-get-and-put-object-acl-tutorial-examples/">AWS 命令列界面 CLI 設定 S3 ACL 權限控制資料存取教學</a>
+									</li>
+											<li>
+					<a href="https://officeguide.cc/linux-redirect-crontab-output-to-log-files-syslog-tutorial-examples/">Linux 將 Crontab 的輸出導入記錄檔案、Syslog 教學與範例</a>
+									</li>
+					</ul>
+
+		</div></section>
+<section id="custom_html-4" class="widget_text widget widget_custom_html"><div class="widget_text widget-wrap"><div class="textwidget custom-html-widget"><!-- OfficeGuide 側邊連結回應式（一） -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="1128013910"
+     data-ad-format="link"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></div></section>
+<section id="custom_html-5" class="widget_text widget widget_custom_html"><div class="widget_text widget-wrap"><div class="textwidget custom-html-widget"><!-- OfficeGuide 側邊回應式（二） -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5624032307910838"
+     data-ad-slot="8351897817"
+     data-ad-format="vertical"
+     data-full-width-responsive="true"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div></div></section>
+<section id="custom_html-6" class="widget_text widget widget_custom_html"><div class="widget_text widget-wrap"><h3 class="widgettitle widget-title">推薦網站</h3>
+<div class="textwidget custom-html-widget"><ul>
+	<li><a href="https://officeguide.cc/recommends/udemy/">Udemy 線上教學課程</a></li>
+	<li><a href="https://officeguide.cc/recommends/coursera/">Coursera 線上教學課程</a></li>
+</ul></div></div></section>
+<section id="simple-social-icons-2" class="widget simple-social-icons"><div class="widget-wrap"><h3 class="widgettitle widget-title">關注本站</h3>
+<ul class="alignleft"><li class="ssi-email"><a href="mailto:officeguide.cc@gmail.com" ><svg role="img" class="social-email" aria-labelledby="social-email-2"><title id="social-email-2">電子郵件</title><use xlink:href="https://officeguide.cc/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-email"></use></svg></a></li><li class="ssi-facebook"><a href="https://www.facebook.com/officeguide.cc/" ><svg role="img" class="social-facebook" aria-labelledby="social-facebook-2"><title id="social-facebook-2">Facebook</title><use xlink:href="https://officeguide.cc/wp-content/plugins/simple-social-icons/symbol-defs.svg#social-facebook"></use></svg></a></li></ul></div></section>
+</aside></div></div><footer class="site-footer" itemscope="" itemtype="https://schema.org/WPFooter"><div class="wrap"><p>Copyright ©&nbsp;2020 · <a href="https://officeguide.cc/">Office Guide</a></p></div></footer>
+</div><style type="text/css" media="screen"> #simple-social-icons-2 ul li a, #simple-social-icons-2 ul li a:hover, #simple-social-icons-2 ul li a:focus { background-color: #f5f5f5 !important; border-radius: 3px; color: #333333 !important; border: 0px #ffffff solid !important; font-size: 20px; padding: 10px; }  #simple-social-icons-2 ul li a:hover, #simple-social-icons-2 ul li a:focus { background-color: #333333 !important; border-color: #ffffff !important; color: #ffffff !important; }  #simple-social-icons-2 ul li a:focus { outline: 1px dotted #333333 !important; }</style><script type='text/javascript' id='eafl-public-js-extra'>
+/* <![CDATA[ */
+var eafl_public = {"home_url":"https:\/\/officeguide.cc\/","ajax_url":"https:\/\/officeguide.cc\/wp-admin\/admin-ajax.php","nonce":"4b1e0f40e8"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://officeguide.cc/wp-content/plugins/easy-affiliate-links/dist/public.js?ver=3.5.0' id='eafl-public-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-includes/js/comment-reply.min.js?ver=5.5' id='comment-reply-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-includes/js/hoverIntent.min.js?ver=1.8.1' id='hoverIntent-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-content/themes/genesis/lib/js/menu/superfish.min.js?ver=1.7.10' id='superfish-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-content/themes/genesis/lib/js/menu/superfish.args.min.js?ver=3.3.3' id='superfish-args-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-content/themes/genesis/lib/js/skip-links.min.js?ver=3.3.3' id='skip-links-js'></script>
+<script type='text/javascript' id='genesis-sample-responsive-menu-js-extra'>
+/* <![CDATA[ */
+var genesis_responsive_menu = {"mainMenu":"\u9078\u55ae","menuIconClass":"dashicons-before dashicons-menu","subMenu":"\u5b50\u9078\u55ae","subMenuIconClass":"dashicons-before dashicons-arrow-down-alt2","menuClasses":{"combine":[".nav-primary"],"others":[]}};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://officeguide.cc/wp-content/themes/officeguide/js/responsive-menus.min.js?ver=1.0.0' id='genesis-sample-responsive-menu-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-content/themes/officeguide/js/genesis-sample.js?ver=1.0.0' id='genesis-sample-js'></script>
+<script type='text/javascript' src='https://officeguide.cc/wp-includes/js/wp-embed.min.js?ver=5.5' id='wp-embed-js'></script>
+	<script type="text/javascript">
+
+        jQuery(document).ready(function ($) {
+
+            var recaptcha_ok = false;
+            var the_recaptcha_widget = $("#cerber-recaptcha");
+            var is_recaptcha_visible = ($(the_recaptcha_widget).data('size') !== 'invisible');
+
+            var the_form = $(the_recaptcha_widget).closest("form");
+            var the_button = $(the_form).find('input[type="submit"]');
+            if (!the_button.length) {
+                the_button = $(the_form).find(':button');
+            }
+
+            // visible
+            if (the_button.length && is_recaptcha_visible) {
+                the_button.prop("disabled", true);
+                the_button.css("opacity", 0.5);
+            }
+
+            window.form_button_enabler = function () {
+                if (!the_button.length) return;
+                the_button.prop("disabled", false);
+                the_button.css( "opacity", 1 );
+            };
+
+            // invisible
+            if (!is_recaptcha_visible) {
+                $(the_button).click(function (event) {
+                    if (recaptcha_ok) return;
+                    event.preventDefault();
+                    grecaptcha.execute();
+                });
+            }
+
+            window.now_submit_the_form = function () {
+                recaptcha_ok = true;
+                $(the_button).click(); // this is only way to submit a form that contains "submit" inputs
+            };
+        });
+	</script>
+	<script src = "https://www.google.com/recaptcha/api.js?hl=zh" async defer></script>
+	</body></html>
+<!-- *´¨)
+     ¸.•´¸.•*´¨) ¸.•*¨)
+     (¸.•´ (¸.•` ¤ Comet Cache is Fully Functional ¤ ´¨) -->
+
+<!-- Cache File Version Salt:       n/a -->
+
+<!-- Cache File URL:                https://officeguide.cc/larave-6-implement-user-roles-and-permissions-using-gates/ -->
+<!-- Cache File Path:               /cache/comet-cache/cache/https/officeguide-cc/larave-6-implement-user-roles-and-permissions-using-gates.html -->
+
+<!-- Cache File Generated Via:      HTTP request -->
+<!-- Cache File Generated On:       Aug 29th, 2020 @ 4:09 am UTC -->
+<!-- Cache File Generated In:       3.53139 seconds -->
+
+<!-- Cache File Expires On:         Sep 5th, 2020 @ 4:09 am UTC -->
+<!-- Cache File Auto-Rebuild On:    Sep 5th, 2020 @ 4:09 am UTC -->
+
+<!-- Loaded via Cache On:    Aug 29th, 2020 @ 7:03 am UTC -->
+<!-- Loaded via Cache In:    0.00312 seconds -->
