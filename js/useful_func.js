@@ -151,7 +151,7 @@ function drop(e) {
  * @param {array} content [["123", "456", "789"], ["abc", "def", "cba"]]
  * @param {array} header ["head1","head2","head3"]
  */
-function exportCsv(filename = "result.csv", content, header) {
+function exportCsv(content, header, filename = "result.csv") {
     // Prepare data.
     let testData = content || [["123", "456", "789"], ["abc", "def", "cba"]];
     let data = "";
@@ -180,3 +180,14 @@ function exportCsv(filename = "result.csv", content, header) {
     element.click();
     document.body.removeChild(element);
 }
+
+/**
+ * Flatten an n-dimensional array.
+ * @param {array} arr 
+ * @returns {array}
+ */
+function flatten(arr) {
+    return arr.reduce(function (flat, toFlatten) {
+      return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+    }, []);
+  }
