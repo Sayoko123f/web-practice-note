@@ -180,14 +180,26 @@ function exportCsv(content, header, filename = "result.csv") {
     element.click();
     document.body.removeChild(element);
 }
-
-/**
+/** 
  * Flatten an n-dimensional array.
  * @param {array} arr 
  * @returns {array}
  */
 function flatten(arr) {
     return arr.reduce(function (flat, toFlatten) {
-      return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
-  }
+}
+
+/**
+ * Convert URL parameters to a JavaScript object.
+ * @example URLSearchParamsToObject(new URL(location.href));
+ * @param {URL} url is URL object.
+ */
+function URLSearchParamsToObject(url) {
+    const obj = {};
+    for (const [key, val] of [...url.searchParams]) {
+        obj[key] = val;
+    }
+    return obj;
+}

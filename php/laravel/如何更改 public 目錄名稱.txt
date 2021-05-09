@@ -1,0 +1,83 @@
+How to change the Laravel public folder path
+PHP, Laravel and Composer
+In this post, we will show how to change the Laravel public folder path (the default path for publishing public content, including the index). Actually, there is no configuration value to change this, but you can change some special files to change it to another location, and your application will continue working as expected.
+
+Note: For Laravel 8, you can check this new post: Create a Laravel 8 application from scratch
+
+This is a typical Laravel folder structure, with the default public folder :
+
+/
+/app
+/bootstrap
+/config
+/database
+/public
+    /index.php
+/resources
+/routes
+/storage
+This is specially useful when you try to deploy or publish your application in a standard web server. You may want to use the already existent root folder of your web service. Sometimes this folder is called public_html. An example of a typical user public html path is /home/user/public_html.
+
+If you want to publish your application avoiding installing the laravel application folder. You may need to change public folder to a public_html folder, in order to use your default web location:
+
+/home
+ /user
+  /app
+  /public_html
+    /index.php
+  /resources
+  /routes
+  /storage
+Modify Laravel files
+These are the 4 most important files you need to change in order to run your application in a custom public folder:
+
+./server.php
+This file is in the root folder. Is used by the local PHP development server when you call the command php artisan serve. It has a hard-coded value for the public folder. Change this values to your custom path (Example: public_html).
+
+if ($uri !== '/' && file_exists(__DIR__.'/public'.$uri)) {
+  return false;
+}
+
+require_once __DIR__.'/public/index.php';
+./app/AppServiceProvider.php
+In this file you can register and start some service providers of the application. There is a function named register(). Generally, this section is empty by default. You need to add extra code to define a custom application path.
+
+public function register()
+{
+  $this->app->bind('path.public', function() {
+    return base_path().'/public_html';
+  });
+}
+./config/filesystems.php
+This file defines some important filesystem locations, use of cloud filesystems and other file-related configuration. Modify the section 'public' to change the 'root' value 'app/public' to your desired location, for example, app/public_html (app is an alias of your root folder).
+
+'public' => [
+  'driver' => 'local',
+  'root' => storage_path('app/public'),
+  'url' => env('APP_URL').'/storage',
+  'visibility' => 'public',
+],
+./webpack.mix.js
+Optionally, some Laravel installations are using the Laravel Mix plugin module to generate unified and minified versions of javascript, css and other front-end files using the Webpack npm plugin. These files are installed in the public folder (for example, ./public/js and ./public/css/). Add a line to change the default public path (mix.config.publicPath), and change the public folder to your desired public folder name in the Laravel mix configuration.
+
+mix.config.publicPath='public_html';
+mix.js('resources/assets/js/app.js', 'public_html/js')
+  .sass('resources/assets/sass/app.scss', 'public_html/css');
+Moving your public folder
+The simplest way to move your public folder to another one, is using the move (mv) command. After that, your public folder now will be renamed.
+
+mv public public_html
+
+Recommended Books
+Checking your new configuration.
+You can test your new configuration checking runnig the following commands:
+
+If you are using the Laravel mix plugin, you may want to test the webpack processor using the commandnpm run devYou will get updated versions of .js and .css files in the new folder
+DONE Compiled successfully in 10528ms 10:23:50 PM
+
+Asset Size Chunks Chunk Names
+/public_html/js/app.js 1.51 MB 0 [emitted] [big] /public_html/js/app
+public_html/css/app.css 276 kB 0 [emitted] [big] /public_html/js/app
+Then, run the php development server to test your application, using the commandphp artisan serveYou can test your application using the default urlhttp://localhot:8000/
+Updating your changes in version control
+After testing your site and checking if all is working, do not forget to commit your last changes in your Git or any other version control.
