@@ -67,3 +67,5 @@ let timer = setInterval(() => {
     p1.classList.toggle('red', arr[2]);
 }, 500);
 ```
+## References
+[MDN](https://developer.mozilla.org/zh-TW/docs/Web/API/Element/classList)
