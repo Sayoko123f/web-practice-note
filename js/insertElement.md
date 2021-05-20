@@ -81,3 +81,4 @@ insertAfter(btn7, document.getElementById('btn4'));
 let btn3 = document.getElementById('btn3');
 btn3.parentNode.removeChild(btn3);
 ```
+也有一種方法是 ```element.remove()``` 直接在要刪除的元素上調用即可，但這種方法 IE 不支援。
