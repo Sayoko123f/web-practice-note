@@ -1,0 +1,13 @@
+$notices = DB::table('notices')
+        ->join('users', 'notices.user_id', '=', 'users.id')
+        ->join('departments', 'users.dpt_id', '=', 'departments.id')
+        ->select('notices.id', 'notices.title', 'notices.body', 'notices.created_at', 'notices.updated_at', 'users.name', 'departments.department_name')
+        ->paginate(20);
+
+https://stackoverflow.com/questions/44090392/how-to-use-pagination-with-laravel-dbselect-query
+
+$data = DB::table('albums')
+            ->join(DB::raw('(SELECT `aid`,GROUP_CONCAT(`tag`) AS tag FROM `albums_tag` GROUP BY `albums_tag`.`aid`) AS albums_tag'), 'albums.id', '=', 'albums_tag.aid')
+            ->join(DB::raw('(SELECT `aid`,GROUP_CONCAT(`comment`) AS comment,GROUP_CONCAT(`position`) AS position FROM `albums_chapter` GROUP BY `albums_chapter`.`aid`) AS albums_chapter'), 'albums.id', '=', 'albums_chapter.aid')
+            ->select('albums.id', 'albums.title', 'albums.images', 'albums_tag.tag', 'albums_chapter.position', 'albums_chapter.comment')
+            ->paginate(5);

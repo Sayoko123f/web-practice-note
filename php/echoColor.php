@@ -47,7 +47,7 @@ echo echocolor("Hello World", 'light-blue', 'b-red') . PHP_EOL;
  * @see https://misc.flogisoft.com/bash/tip_colors_and_formatting
  * @see https://www.shellhacks.com/bash-colors/
  */
-function echocolor(string $str, ...$color)
+function echocolor(string $str, ...$color): string
 {
     $map = [
         'black' => 30, 'red' => 31, 'green' => 32, 'brown' => 33, 'blue' => 34, 'purple' => 35, 'cyan' => 36, 'l-gray' => 37,
