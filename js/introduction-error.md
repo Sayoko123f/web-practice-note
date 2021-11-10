@@ -26,7 +26,7 @@ try {
 ```
 
 ## throw 拋出錯誤
-除了 JavaScript 發生錯誤時系統自動拋出錯誤，我們也可以使用 *throw* 手動拋出錯誤，語法如下：
+除了 JavaScript 發生錯誤時系統自動拋出錯誤，我們也可以使用 **throw** 手動拋出錯誤，語法如下：
 ```
 throw expression
 ```

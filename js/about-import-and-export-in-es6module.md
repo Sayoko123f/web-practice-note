@@ -85,7 +85,7 @@ import hello, { PI } from "./test3.js";
 ```
 又或者是這樣寫：
 ```js
-import { default as hello, PI } from "./test1.js";
+import { default as hello, PI } from "./test3.js";
 ```
 
 ### 重新匯出
