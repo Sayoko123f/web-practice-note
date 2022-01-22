@@ -41,3 +41,20 @@ downloadFile(path.resolve('logo.png'), url).then(res => {
     console.log(err);
 });
 ```
+
+## 列出目錄下所有內容
+
+```js
+import fs from 'fs';
+import path from 'path';
+
+const rootpath = path.resolve('pathlike');
+
+fs.readdir(rootpath, function (err, files) {
+    if (err) {
+        console.error(err);
+        return;
+    }
+    console.log(files);
+})
+```
