@@ -1,6 +1,6 @@
 import * as readline from "readline";
 
-function askQuestion(query) {
+export default function askQuestion(query) {
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -13,5 +13,5 @@ function askQuestion(query) {
 }
 
 // How to use
-const ans = await askQuestion("Are you sure?");
-console.log('Your answer:', ans);
+// const ans = await askQuestion("Are you sure?");
+// console.log('Your answer:', ans);

@@ -49,7 +49,7 @@ import { hello as hi, plus as add } from "./test1.js";
 console.log(hi); // hello world
 console.log(add(1, 2)); // 3
 ```
-使用 **星號「*」 搭配 as** 可以一次性匯入所有東西，它會創建一個物件，調用物件的特性即可使用。
+使用 星號「*」 搭配 **as** 可以一次性匯入所有東西，它會創建一個物件，調用物件的特性即可使用。
 ```js
 import * as mod1 from "./test1.js"
 console.log(mod1.hello); // hello world

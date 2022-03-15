@@ -110,6 +110,23 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
     await client.close();
 })();
 ```
+可寫成一個函式：
+```js
+async function connect() {
+    const { mongo } = env;
+    const uri = mongo.URI;
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+    await client.connect();
+    const collection = client.db(mongo.database).collection('lab');
+    return { client, collection };
+}
+
+```
+使用：
+```js
+const { client, collection } = await connect();
+```
 
 ### 新增資料
 以下將在 `sample_airbnb.practiceData` 新增資料。
@@ -171,6 +188,23 @@ MongoDB 很貼心幫我們準備了 **Sample Dataset**，就用它來練習吧�
     // plot: 'Three men hammer on an anvil and pass a bottle of beer around.',
     // etc...
 })();   
+```
+
+##### 根據 ObjectId
+```js
+import { MongoClient, ObjectId } from "mongodb";
+
+export async function show(_id) {
+    const { client, collection } = await connect();
+
+    const docs = { _id: new ObjectId(_id), type: 'album' };
+
+    const data = await collection.findOne(docs);
+
+    await client.close();
+    return data;
+}
+
 ```
 
 #### find 查詢多筆

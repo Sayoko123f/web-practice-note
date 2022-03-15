@@ -1,0 +1,58 @@
+<?php
+/** Connent database */
+try {
+    $host = "localhost";
+    $db_name = "test";
+    $db_user = "test";
+    $db_password = "123";
+    $con = new PDO("mysql:host=$host;dbname=$db_name;charset=utf8", $db_user, $db_password);
+    $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Failed to connect database: " . $e->getMessage());
+}
+$table = 'rstop_test';
+$sql = "CREATE TABLE IF NOT EXISTS `$table`(" .
+    "`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT," .
+    "`ROUTE_ID` INT NOT NULL," .
+    "`ROUTE_SEQ` INT NOT NULL," .
+    "`STOP_SEQ` INT NOT NULL," .
+    "`STOP_ID` INT NOT NULL," .
+    "`STOP_PICK_DROP` INT NOT NULL," .
+    "`STOP_NAMEC` TEXT NOT NULL," .
+    "`STOP_NAMES` TEXT NOT NULL," .
+    "`STOP_NAMEE` TEXT NOT NULL," .
+    "`LAST_UPDATE_DATE` TEXT NOT NULL" .
+    ")CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+$con->query($sql);
+/** end Connent database */
+
+/** Get data */
+$dataUrl = 'https://static.data.gov.hk/td/routes-fares-xml/RSTOP_BUS.xml';
+$content = file_get_contents($dataUrl);
+if(!$content){
+    die('Failed to get file.');
+}
+/** end get data */
+
+$xml = simplexml_load_string($content);
+$tagName = array('ROUTE_ID', 'ROUTE_SEQ', 'STOP_SEQ', 'STOP_ID', 'STOP_PICK_DROP', 'STOP_NAMEC', 'STOP_NAMES', 'STOP_NAMEE', 'LAST_UPDATE_DATE');
+$ii = 0;
+foreach ($xml->children() as $item) {
+    $valueArray = array();
+    for ($i = 0; $i < 9; $i++) {
+        $key = $tagName[$i];
+        $valueArray[] = $item->$key;
+    }
+    /** Insert database */
+    $sql = "INSERT INTO `$table`(`ROUTE_ID`,`ROUTE_SEQ`,`STOP_SEQ`,`STOP_ID`,`STOP_PICK_DROP`,`STOP_NAMEC`,`STOP_NAMES`,`STOP_NAMEE`,`LAST_UPDATE_DATE`) VALUES(?,?,?,?,?,?,?,?,?);";
+    $stmt = $con->prepare($sql);
+    try {
+        $stmt->execute($valueArray);
+    } catch (\PDOException $e) {
+        var_dump($valueArray);
+        $stmt->debugDumpParams();
+        die("$ii, ".$e->getMessage());
+    }
+    /** end Insert */
+    $ii++;
+}
