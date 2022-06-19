@@ -55,18 +55,27 @@ createApp(App).mount('#app')
 ```
 npm install vue-router@4
 ```
-建立 `./src/router.js` 檔案，底下是範例內容，自行修改。
-```js
-import { createRouter, createWebHistory } from 'vue-router';
-import HelloWorld from './components/HelloWorld.vue';
+建立 `./src/router.ts` 檔案，底下是範例內容，自行修改。
+```ts
+import {
+    createRouter,
+    createWebHistory,
+    RouteRecordRaw,
+    RouterScrollBehavior,
+} from 'vue-router';
 
-const routes = [
-    { path: '/', component: HelloWorld, name: 'home' },
-];
+const routes = [] as RouteRecordRaw[];
 
 export const router = createRouter({
-    history: createWebHistory(),
     routes,
+    history: createWebHistory(),
+    scrollBehavior: function (to) {
+        if (to.hash) {
+            return { el: to.hash };
+        } else {
+            return { x: 0, y: 0 };
+        }
+    } as RouterScrollBehavior,
 });
 ```
 在 `./src/main.ts` 中引入 **router**
@@ -80,6 +89,27 @@ createApp(App).use(router).mount('#app');
 ```
 ### Pinia
 [docs](https://pinia.vuejs.org/getting-started.html)
+```
+npm install pinia
+```
+在 `./src/main.ts` 中引入 **pinia**
+```js
+import { createPinia } from 'pinia'
+
+createApp(App).use(createPinia()).mount('#app');
+```
+建立 `./src/store` 資料夾，在裡面創建 `my-store.ts`(檔名自由發揮)，以下是範例內容
+```js
+import { defineStore } from 'pinia';
+export const useStore = defineStore('myStore', {
+    state: () => ({
+      // foo: "bar"
+    }),
+    actions: {
+      // somefunction(){}
+    },
+});
+```
 ### vuex
 > 官方推薦改用 Pinia 取代 vuex
 
@@ -141,7 +171,19 @@ npm install -D @tailwindcss/typography
 ```
 require('@tailwindcss/typography'),
 ```
+### Heroicons
+[Heroicons](https://heroicons.com/)
+```
+npm install @heroicons/vue
+```
 
 ## 其它
+### Axios
+[npm](https://www.npmjs.com/package/axios)
+
+[github](https://github.com/axios/axios)
+```
+npm install axios
+```
 ### VS Code
 [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss) 使用 Tailwind 必裝的擴充功能。
